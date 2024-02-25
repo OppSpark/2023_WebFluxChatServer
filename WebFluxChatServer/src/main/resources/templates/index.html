@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>랜덤 채팅!</title>
+  <link rel="stylesheet" href="./index.css">
+  <style>
+    #chat-container {
+      width: 500px;
+      margin: 50px auto;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .text-center{
+      margin-top : 50px;
+      text-align: center;
+    }
+
+    .chat-box {
+      height: 300px;
+      overflow-y: auto;
+    }
+
+    #message-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #message-input {
+      padding: 10px;
+      background-color: #f5f5f5;
+    }
+
+    #inputMessage {
+      width: 70%;
+      padding: 5px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+    }
+
+    #message-input button {
+      padding: 5px 10px;
+      border: none;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    #nickname-input {
+      padding: 10px;
+      background-color: #f5f5f5;
+    }
+
+    #username {
+      width: 70%;
+      padding: 5px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+    }
+
+    #confirmUsername {
+      padding: 5px 10px;
+      border: none;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+  </style>
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+<pre class="text-center">Spring Boot WebFlux를 이용한 실시간 채팅 서비스</pre>
+
+<div id="chat-container">
+  <div class="chat-box">
+    <ul id="message-list"></ul>
+
+  </div>
+  <div id="message-input">
+    <input type="text" id="inputMessage" placeholder="메시지를 입력해봐요">
+    <button onclick="sendMessage()">전송</button>
+  </div>
+  <div id="nickname-input">
+
+    <input type="text" id="username" placeholder="닉네임을 입력해주세요">
+    <button id="confirmUsername" onclick="confirmUsername()">완료</button>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  const chatWebSocket = new WebSocket('ws://' + location.host + '/ws-chat');
+  const inputMessage = document.getElementById('inputMessage');
+  const messageList = document.getElementById('message-list');
+
+  chatWebSocket.onmessage = function(event) {
+    const li = document.createElement('li');
+    li.innerText = event.data;
+    messageList.appendChild(li);
+  };
+
+  chatWebSocket.onclose = function(event) {
+    alert('서버에 오류가 있어요');
+  };
+
+  function sendMessage() {
+    if (inputMessage.value.trim() === '') {
+      return;
+    }
+
+    const username = document.getElementById("username").value.trim();
+    const messageObject = {
+      username: username,
+      message: inputMessage.value,
+    };
+    chatWebSocket.send(JSON.stringify(messageObject));
+    inputMessage.value = '';
+  }
+
+  function confirmUsername() {
+    const usernameInput = document.getElementById("username");
+    const confirmButton = document.getElementById("confirmUsername");
+    if (usernameInput.value.trim() !== '') {
+      usernameInput.disabled = true;
+      confirmButton.disabled = true;
+      confirmButton.style.backgroundColor = "gray";
+    }
+  }
+</script>
+</body>
+</html>
