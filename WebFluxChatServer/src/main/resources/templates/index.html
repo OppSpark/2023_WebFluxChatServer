@@ -72,16 +72,6 @@
     }
   </style>
 
-
-
-
-
-
-
-
-
-
-
 </head>
 <body>
 <pre class="text-center">Spring Boot WebFlux를 이용한 실시간 채팅 서비스</pre>
@@ -92,25 +82,17 @@
 
   </div>
   <div id="message-input">
-    <input type="text" id="inputMessage" placeholder="메시지를 입력해봐요">
+    <label for="inputMessage"></label><input type="text" id="inputMessage" placeholder="메시지를 입력해봐요">
+
     <button onclick="sendMessage()">전송</button>
+
   </div>
   <div id="nickname-input">
 
-    <input type="text" id="username" placeholder="닉네임을 입력해주세요">
+    <label for="username"></label><input type="text" id="username" placeholder="닉네임을 입력해주세요">
     <button id="confirmUsername" onclick="confirmUsername()">완료</button>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
 
 <script>
   const chatWebSocket = new WebSocket('ws://' + location.host + '/ws-chat');
